@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from requests import RequestException
 from telegram import Update
 from telegram.ext import (
@@ -8,14 +9,16 @@ from telegram.ext import (
 )
 from main import get_repos
 
+load_dotenv()
 
-TOKEN = os.environ.get("TOKEN")
+TOKEN = str(os.environ.get("TOKEN"))
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
         "Hello! Your bot is working.\nUse /repos <username>"
     )
+    print("Start was called!")
 
 
 async def repos(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -60,6 +63,7 @@ async def get_activity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 def main():
+    print("Bot Running..")
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("repos", repos))
